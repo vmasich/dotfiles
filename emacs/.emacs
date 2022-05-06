@@ -56,8 +56,6 @@
 
 (setq use-dialog-box nil)
 
-(exec-path-from-shell-initialize)
-(exec-path-from-shell-copy-env "GOPATH")
 
 (setq-default tab-width 2)
 
@@ -140,8 +138,6 @@
 (setq require-final-newline t)
 
 
-(use-package all-the-icons)
-
 (setq sh-basic-offset 2)
 (setq sh-indentation 2)
 
@@ -150,12 +146,6 @@
   :commands (lsp lsp-deferred)
   :hook (go-mode . lsp-deferred))
 
-;; Set up before-save hooks to format buffer and add/delete imports.
-;; Make sure you don't have other gofmt/goimports hooks enabled.
-(defun lsp-go-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
 ;; Optional - provides fancier overlays.
 (use-package lsp-ui
@@ -204,3 +194,77 @@
 (use-package go-snippets
   :ensure t
   )
+
+(use-package protobuf-mode
+  :ensure t
+  )
+
+(use-package ansible
+  :ensure t
+  )
+
+(use-package iedit
+  :ensure t
+  )
+
+(use-package adoc-mode
+  :ensure t
+  )
+
+(use-package all-the-icons
+  :ensure t
+  )
+
+(use-package all-the-icons-completion
+  :ensure t
+  :config
+  (all-the-icons-completion-mode)
+  )
+
+(use-package all-the-icons-dired
+  :ensure t
+  :hook (dired-mode-hook . all-the-icons-dired-mode)
+  )
+
+(use-package all-the-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . all-the-icons-ibuffer-mode)
+  )
+
+(use-package company
+  :ensure t
+  :hook (after-init-hook . global-company-mode)
+  )
+
+(use-package dockerfile-mode
+  :ensure t
+  )
+
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "GOPATH")
+  )
+
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode)
+  )
+
+;; Set up before-save hooks to format buffer and add/delete imports.
+;; Make sure you don't have other gofmt/goimports hooks enabled.
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+(use-package go-mode
+  :ensure t
+  :hook (go-mode-hook . lsp-go-install-save-hooks)
+  ;; :hook (go-mode-hook . (lambda()
+  ;;                         (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  ;;                         (add-hook 'before-save-hook #'lsp-organize-imports t t)))
+  )
+
+(provide '.emacs)
+;;; .emacs ends here
