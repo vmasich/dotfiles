@@ -14,7 +14,7 @@
    '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(lsp-ui-flycheck-list-position 'right)
  '(package-selected-packages
-   '(ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path adoc-mode all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile pyenv-mode pyenv-mode-auto smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
+   '(go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path adoc-mode all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile pyenv-mode pyenv-mode-auto smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -86,6 +86,27 @@
 
 (global-set-key (kbd "C-=") 'comment-or-uncomment-region )
 (global-set-key (kbd "<f9>") 'compile )
+
+
+(require 'ido)
+(ido-mode 1)
+(setq ido-enable-flex-matching t)
+
+(require 'package)
+
+(require 'wgrep)
+
+(sml/setup)
+
+
+;; (use-package neotree
+;;   :init
+;;   (require 'neotree)
+;;   :bind
+;;   ([f8] . neotree-toggle)
+;;   :config
+;;   (setq neo-default-system-application "open"))
+
 (global-set-key (kbd "S-<f5>") 'neotree-toggle )
 (global-set-key (kbd "<f5>") 'neotree-find )
 (global-set-key (kbd "C-<f5>") 'neotree-change-root )
@@ -113,15 +134,10 @@
         ))
 
 
-(require 'ido)
-(ido-mode 1)
-(setq ido-enable-flex-matching t)
 
-(require 'package)
 
-(require 'wgrep)
-
-(sml/setup)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(setq require-final-newline t)
 
 
 (use-package all-the-icons)
@@ -178,3 +194,13 @@
       (unless (ignore-errors                   ;some packages may fail to install
                 (package-reinstall package-name))
         (warn "Package %s failed to reinstall" package-name)))))
+
+(use-package yasnippet
+  :ensure t
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
+  (yas-global-mode 1))
+
+(use-package go-snippets
+  :ensure t
+  )
