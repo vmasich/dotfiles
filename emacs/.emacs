@@ -14,7 +14,7 @@
    '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(lsp-ui-flycheck-list-position 'right)
  '(package-selected-packages
-   '(go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path adoc-mode all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile pyenv-mode pyenv-mode-auto smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
+   '(lsp-pyright lsp-ui lsp-mode go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path adoc-mode all-the-icons dockerfile-mode exec-path-from-shell magit markdown-mode neotree ox-asciidoc ox-epub projectile pyenv-mode pyenv-mode-auto smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
