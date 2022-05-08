@@ -14,7 +14,7 @@
    '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(lsp-ui-flycheck-list-position 'right)
  '(package-selected-packages
-   '(go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path adoc-mode all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile pyenv-mode pyenv-mode-auto smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
+   '(adoc-mode treemacs-magit go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -68,6 +68,7 @@
 (setq linum-format " %d")
 (setq ring-bell-function 'ignore)
 
+(require 'make-mode)
 (add-hook 'makefile-mode-hook
   '(lambda()
      (setq indent-tabs-mode t)
@@ -75,11 +76,9 @@
 )
 
 (setq-default indent-tabs-mode nil)
-
-;; (add-hook 'neotree-mode-hook 'hl-line-mode)
 (add-hook 'dired-mode-hook 'hl-line-mode)
 (add-hook 'package-menu-mode-hook 'hl-line-mode)
-(add-hook 'buffer-menu-mode-hook 'hl-line-mode)
+(add-hook 'Buffer-menu-mode-hook 'hl-line-mode)
 (setq confirm-kill-emacs 'y-or-n-p)
 
 (global-set-key (kbd "C-=") 'comment-or-uncomment-region )
@@ -89,55 +88,12 @@
 (require 'ido)
 (ido-mode 1)
 (setq ido-enable-flex-matching t)
-
 (require 'package)
-
-(require 'wgrep)
-
-(sml/setup)
-
-
-;; (use-package neotree
-;;   :init
-;;   (require 'neotree)
-;;   :bind
-;;   ([f8] . neotree-toggle)
-;;   :config
-;;   (setq neo-default-system-application "open"))
-
-(global-set-key (kbd "S-<f5>") 'neotree-toggle )
-(global-set-key (kbd "<f5>") 'neotree-find )
-(global-set-key (kbd "C-<f5>") 'neotree-change-root )
-
-
-(defun my-neotree-mode-hook ()
-  (hl-line-mode)
-  (local-set-key (kbd "d") 'neotree-delete-node)
-  (local-set-key (kbd "r") 'neotree-rename-node)
-)
-(add-hook 'neotree-mode-hook 'my-neotree-mode-hook)
-
-(setq neo-window-width 40)
-
-(setq neo-hidden-regexp-list
-      '(
-        ".*~$"
-        "\\.cs\\.meta$"
-        "\\.elc$"
-        "\\.pyc$"
-        "^#.*#$"
-        "^.#"
-        "^\\.git"
-        "~$"
-        ))
-
-
+;; (require 'wgrep)
 
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (setq require-final-newline t)
-
-
 (setq sh-basic-offset 2)
 (setq sh-indentation 2)
 
@@ -169,6 +125,8 @@
 (add-hook 'before-save-hook #'lsp-organize-imports)
 (add-hook 'before-save-hook #'lsp-format-buffer)
 
+(setq byte-compile-warnings '(cl-functions)) ;; removes cl warning
+
 (use-package lsp-pyright
   :ensure t
   :hook (python-mode . (lambda ()
@@ -185,35 +143,12 @@
                 (package-reinstall package-name))
         (warn "Package %s failed to reinstall" package-name)))))
 
-(use-package yasnippet
-  :ensure t
-  :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
-  (yas-global-mode 1))
 
-(use-package go-snippets
-  :ensure t
-  )
+(use-package ansible :ensure t )
 
-(use-package protobuf-mode
-  :ensure t
-  )
+(use-package adoc-mode :ensure t )
 
-(use-package ansible
-  :ensure t
-  )
-
-(use-package iedit
-  :ensure t
-  )
-
-(use-package adoc-mode
-  :ensure t
-  )
-
-(use-package all-the-icons
-  :ensure t
-  )
+(use-package all-the-icons :ensure t )
 
 (use-package all-the-icons-completion
   :ensure t
@@ -252,6 +187,8 @@
   :init (global-flycheck-mode)
   )
 
+
+
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
 (defun lsp-go-install-save-hooks ()
@@ -265,6 +202,109 @@
   ;;                         (add-hook 'before-save-hook #'lsp-format-buffer t t)
   ;;                         (add-hook 'before-save-hook #'lsp-organize-imports t t)))
   )
+
+(use-package go-playground :ensure t )
+
+(use-package go-snippets :ensure t )
+
+(use-package iedit :ensure t )
+
+(use-package json-mode :ensure t )
+
+(use-package magit  :ensure t )
+
+(use-package markdown-mode   :ensure t  )
+
+(use-package neotree
+  :ensure t
+  :config
+  (setq neo-window-width 40)
+  (setq neo-hidden-regexp-list
+      '(
+        ".*~$"
+        "\\.cs\\.meta$"
+        "\\.elc$"
+        "\\.pyc$"
+        "^#.*#$"
+        "^.#"
+        "^\\.git"
+        "~$"
+        ))
+  
+  :init
+  (global-set-key (kbd "S-<f5>") 'neotree-toggle )
+  (global-set-key (kbd "<f5>") 'neotree-find )
+  (global-set-key (kbd "C-<f5>") 'neotree-change-root )
+  (defun my-neotree-mode-hook ()
+    (hl-line-mode)
+    (local-set-key (kbd "d") 'neotree-delete-node)
+    (local-set-key (kbd "r") 'neotree-rename-node)
+    )
+  (add-hook 'neotree-mode-hook 'my-neotree-mode-hook)
+
+  )
+
+(use-package nvm :ensure t )
+(use-package ox-asciidoc :ensure t )
+(use-package ox-epub :ensure t )
+
+(use-package projectile
+  :ensure t
+  :init
+  (projectile-mode +1)
+  :bind (:map projectile-mode-map
+              ("s-p" . projectile-command-map)
+              ("C-c p" . projectile-command-map)))
+
+
+
+(use-package protobuf-mode :ensure t )
+
+;; (use-package pyenv-mode
+;;   :ensure t
+;;   :init
+;;   ;;(pyenv-mode)
+;;   ;; todo - setup pyenv on linux
+;;   )
+
+(use-package smart-mode-line-powerline-theme :ensure t)
+  
+
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (sml/setup)
+  )
+
+(use-package terraform-doc :ensure t )
+(use-package terraform-mode :ensure t )
+
+(use-package treemacs
+  :ensure t
+  :defer t
+  )
+
+(use-package treemacs-projectile
+  :after (treemacs projectile)
+  :ensure t)
+
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :ensure t)
+
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :ensure t)
+
+(use-package wgrep :ensure t)
+(use-package yaml-mode :ensure t)
+
+(use-package yasnippet
+  :ensure t
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
+  (yas-global-mode 1))
+
 
 (provide '.emacs)
 ;;; .emacs ends here
