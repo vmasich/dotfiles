@@ -14,8 +14,9 @@
    '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(lsp-ui-flycheck-list-position 'right)
  '(package-selected-packages
-   '(adoc-mode treemacs-magit go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
- '(tool-bar-mode nil))
+   '(org-web-tools py-autopep8 impatient-mode simple-httpd adoc-mode treemacs-magit go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
+ '(tool-bar-mode nil)
+ '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -39,11 +40,12 @@
  '(js2-object-property ((t (:inherit default :foreground "wheat1"))))
  '(linum ((t (:background "gray19" :foreground "burlywood3" :slant italic :height 0.7))))
  '(markup-meta-face ((t (:foreground "gray60" :inverse-video nil :height 140))))
- '(minibuffer-prompt ((t (:foreground "gold1" :weight bold :height 1.6))))
+ '(minibuffer-prompt ((t (:foreground "gold1" :weight bold :height 1.2))))
  '(mode-line ((t (:background "black" :foreground "gray60" :inverse-video nil :box (:line-width 2 :color "gray30")))))
  '(neo-dir-link-face ((t (:foreground "aquamarine2" :height 0.9))))
  '(neo-expand-btn-face ((t (:foreground "aquamarine2" :height 0.82))))
- '(neo-file-link-face ((t (:foreground "light yellow" :height 0.88)))))
+ '(neo-file-link-face ((t (:foreground "light yellow" :height 0.88))))
+ '(org-level-4 ((t (:inherit outline-4 :extend nil :foreground "IndianRed1")))))
 
 
 
@@ -89,7 +91,6 @@
 (ido-mode 1)
 (setq ido-enable-flex-matching t)
 (require 'package)
-;; (require 'wgrep)
 
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -100,7 +101,14 @@
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
-  :hook (go-mode . lsp-deferred))
+  :hook ((go-mode
+          c-mode
+          c-or-c++-mode
+          c++-mode
+          web-mode
+          python-mode
+          js-mode) . lsp-deferred)
+  )
 
 
 ;; Optional - provides fancier overlays.
@@ -120,6 +128,7 @@
         lsp-ui-peek-enable t
         lsp-ui-peek-list-width 60
         lsp-ui-peek-peek-height 25)
+
   )
 
 (add-hook 'before-save-hook #'lsp-organize-imports)
@@ -130,8 +139,25 @@
 (use-package lsp-pyright
   :ensure t
   :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp))))  ; or lsp-deferred
+                         (require 'lsp-pyright)))
+  ) 
+
+
+(use-package web-mode
+    :mode ("\\.html\\'")
+    :config
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-engines-alist
+          '(("django" . "focus/.*\\.html\\'")
+            ("ctemplate" . "realtimecrm/.*\\.html\\'"))))
+
+(use-package py-autopep8
+  :ensure t
+  :config
+  (setq py-autopep8-options '("--max-line-length=100" "--aggressive"))
+  :hook ( (python-mode) . py-autopep8-mode))
+
+
 
 (defun package-reinstall-all-activated-packages ()
   "Refresh and reinstall all activated packages."
@@ -184,7 +210,8 @@
 
 (use-package flycheck
   :ensure t
-  :init (global-flycheck-mode)
+  :init
+  (global-flycheck-mode)
   )
 
 
@@ -213,7 +240,47 @@
 
 (use-package magit  :ensure t )
 
-(use-package markdown-mode   :ensure t  )
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.md\\'" . gfm-mode)
+  :commands (markdown-mode gfm-mode)
+  :init
+  (defun my-markdown-filter (buffer)
+    (princ
+     (with-temp-buffer
+       (let ((tmp (buffer-name)))
+         (set-buffer buffer)
+         (set-buffer (markdown tmp))
+         (format "<!DOCTYPE html><html><title>Markdown preview</title>
+                  <link rel=\"stylesheet\" href = \"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css\"/> 
+                  <body><article class=\"markdown-body\" 
+                  style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s 
+                  </article></body></html>" (buffer-string))))
+     (current-buffer)))
+
+  (defun markdown-live-preview ()
+    "Preview markdown."
+    (interactive)
+    (unless (process-status "httpd")
+      (httpd-start))
+    (impatient-mode)
+    (imp-set-user-filter 'my-markdown-filter)
+    (imp-visit-buffer))
+  
+  :config
+  (setq markdown-command "pandoc -t html5")
+  )
+
+(use-package simple-httpd
+  :ensure t
+  :config
+  (setq httpd-port 7070)
+  )
+
+(use-package impatient-mode
+  :ensure t
+  :commands impatient-mode
+  )
 
 (use-package neotree
   :ensure t
@@ -305,6 +372,15 @@
   (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
   (yas-global-mode 1))
 
+;; change minibuffer color when active
+(add-hook 'minibuffer-setup-hook
+          (lambda ()
+            (make-local-variable 'face-remapping-alist)
+            (add-to-list 'face-remapping-alist '(default (:background "dark blue")))))
+
+
+
+(use-package org-web-tools :ensure t)
 
 (provide '.emacs)
 ;;; .emacs ends here
