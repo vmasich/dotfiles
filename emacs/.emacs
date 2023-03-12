@@ -14,8 +14,11 @@
    '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(lsp-ui-flycheck-list-position 'right)
  '(package-selected-packages
-   '(org-web-tools py-autopep8 impatient-mode simple-httpd adoc-mode treemacs-magit go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
+   '(visual-fill-column-mode org-web-tools py-autopep8 impatient-mode simple-httpd adoc-mode treemacs-magit go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
  '(tool-bar-mode nil)
+ '(undo-limit 160000000)
+ '(undo-outer-limit 240000000)
+ '(undo-strong-limit 240000000)
  '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -27,6 +30,7 @@
  '(cperl-array-face ((((class color) (background dark)) (:background "black" :foreground "goldenrod" :weight bold))))
  '(cperl-hash-face ((((class color) (background dark)) (:background "black" :foreground "dark salmon" :slant italic :weight bold))))
  '(cursor ((t (:background "goldenrod1"))))
+ '(fill-column-indicator ((t (:stipple nil :foreground "gray30" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal))))
  '(font-lock-comment-face ((((class color) (min-colors 88) (background dark)) (:foreground "dark grey"))))
  '(font-lock-constant-face ((t (:foreground "OliveDrab1" :weight bold))))
  '(font-lock-keyword-face ((t (:foreground "cyan2"))))
@@ -45,6 +49,9 @@
  '(neo-dir-link-face ((t (:foreground "aquamarine2" :height 0.9))))
  '(neo-expand-btn-face ((t (:foreground "aquamarine2" :height 0.82))))
  '(neo-file-link-face ((t (:foreground "light yellow" :height 0.88))))
+ '(org-level-1 ((t (:inherit outline-1 :extend nil :height 1.4))))
+ '(org-level-2 ((t (:inherit outline-2 :extend nil :height 1.2))))
+ '(org-level-3 ((t (:inherit outline-3 :extend nil :height 1.1))))
  '(org-level-4 ((t (:inherit outline-4 :extend nil :foreground "IndianRed1")))))
 
 
@@ -382,5 +389,26 @@
 
 (use-package org-web-tools :ensure t)
 
+;; it reads cookie from Chrome, unsafe!
+;; (use-package leetcode
+;;     :config
+;;     (setq leetcode-language "python3")
+;; )
+
+(use-package org-appear
+  :ensure t
+  :hook (org-mode . org-appear-mode)
+)
+
+(setq org-startup-indented t
+          org-pretty-entities t
+          org-hide-emphasis-markers t
+          org-startup-with-inline-images t
+          org-image-actual-width '(300))
+
+(setq-default fill-column 80)
+
+
 (provide '.emacs)
 ;;; .emacs ends here
+
