@@ -12,9 +12,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
+ '(highlight-indentation-blank-lines t)
  '(lsp-ui-flycheck-list-position 'right)
  '(package-selected-packages
-   '(visual-fill-column-mode org-web-tools py-autopep8 impatient-mode simple-httpd adoc-mode treemacs-magit go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
+   '(highlight-indentation smart-shift company-box visual-fill-column-mode org-web-tools py-autopep8 impatient-mode simple-httpd adoc-mode treemacs-magit go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
  '(tool-bar-mode nil)
  '(undo-limit 160000000)
  '(undo-outer-limit 240000000)
@@ -37,6 +38,8 @@
  '(font-lock-string-face ((((class color) (min-colors 88) (background dark)) (:foreground "DarkSeaGreen3"))))
  '(fringe ((t (:background "#1f2838"))))
  '(highlight-current-line-face ((t (:background "medium blue"))))
+ '(highlight-indentation-current-column-face ((t (:background "#4c5533"))))
+ '(highlight-indentation-face ((t (:background "gray34"))))
  '(iedit-occurrence ((t (:background "DarkOrange1" :foreground "white"))))
  '(js2-function-call ((t (:foreground "DeepSkyBlue1"))))
  '(js2-highlight-vars-face ((t (:background "DarkSlateGray4"))))
@@ -52,7 +55,7 @@
  '(org-level-1 ((t (:inherit outline-1 :extend nil :height 1.4))))
  '(org-level-2 ((t (:inherit outline-2 :extend nil :height 1.2))))
  '(org-level-3 ((t (:inherit outline-3 :extend nil :height 1.1))))
- '(org-level-4 ((t (:inherit outline-4 :extend nil :foreground "IndianRed1")))))
+ '(org-level-4 ((t (:inherit outline-4 :extend nil :foreground "lemon chiffon")))))
 
 
 
@@ -149,6 +152,11 @@
                          (require 'lsp-pyright)))
   ) 
 
+
+(add-hook 'python-mode-hook 'highlight-indentation-mode)
+(add-hook 'python-mode-hook 'smart-shift-mode)
+
+(use-package highlight-indentation :ensure t)
 
 (use-package web-mode
     :mode ("\\.html\\'")
@@ -406,8 +414,15 @@
           org-startup-with-inline-images t
           org-image-actual-width '(300))
 
-(setq-default fill-column 80)
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
 
+
+(setq-default fill-column 80)
+(setq column-number-mode t)
+
+(use-package smart-shift :ensure t)
 
 (provide '.emacs)
 ;;; .emacs ends here
