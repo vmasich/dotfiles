@@ -10,6 +10,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
  '(custom-safe-themes
    '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(highlight-indentation-blank-lines t)
@@ -26,7 +27,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 151 :width normal :foundry "DAMA" :family "Ubuntu Mono"))))
+ '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :extend nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "nil" :family "Fira Code"))))
  '(company-tooltip ((t (:background "medium blue" :foreground "yellow1"))))
  '(cperl-array-face ((((class color) (background dark)) (:background "black" :foreground "goldenrod" :weight bold))))
  '(cperl-hash-face ((((class color) (background dark)) (:background "black" :foreground "dark salmon" :slant italic :weight bold))))
@@ -423,6 +424,24 @@
 (setq column-number-mode t)
 
 (use-package smart-shift :ensure t)
+
+(when (member "Fira Code" (font-family-list))
+  (set-frame-font "Fira Code-15" t t))
+
+;; set font for symbols
+(set-fontset-font
+ t
+ 'symbol
+ (cond
+  ((string-equal system-type "windows-nt")
+   (cond
+    ((member "Segoe UI Symbol" (font-family-list)) "Segoe UI Symbol")))
+  ((string-equal system-type "darwin")
+   (cond
+    ((member "Apple Symbols" (font-family-list)) "Apple Symbols")))
+  ((string-equal system-type "gnu/linux")
+   (cond
+    ((member "Symbola" (font-family-list)) "Symbola")))))
 
 (provide '.emacs)
 ;;; .emacs ends here
