@@ -18,6 +18,7 @@ C++
 
 ``` shell
 sudo apt install clangd-12
+sudo apt install bear
 ```
 
 GO
