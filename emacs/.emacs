@@ -10,7 +10,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(column-number-mode t)
  '(custom-safe-themes
    '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(highlight-indentation-blank-lines t)
@@ -27,7 +26,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :extend nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "nil" :family "Fira Code"))))
+ '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 151 :width normal :foundry "DAMA" :family "Ubuntu Mono"))))
  '(company-tooltip ((t (:background "medium blue" :foreground "yellow1"))))
  '(cperl-array-face ((((class color) (background dark)) (:background "black" :foreground "goldenrod" :weight bold))))
  '(cperl-hash-face ((((class color) (background dark)) (:background "black" :foreground "dark salmon" :slant italic :weight bold))))
@@ -118,6 +117,7 @@
           c++-mode
           web-mode
           python-mode
+          yaml-mode
           js-mode) . lsp-deferred)
   )
 
@@ -154,10 +154,15 @@
   ) 
 
 
-(add-hook 'python-mode-hook 'highlight-indentation-mode)
-(add-hook 'python-mode-hook 'smart-shift-mode)
+;; (add-hook 'python-mode-hook 'highlight-indentation-mode)
+;; (add-hook 'python-mode-hook 'smart-shift-mode)
 
-(use-package highlight-indentation :ensure t)
+(use-package highlight-indentation
+  :ensure t
+  :hook ((
+          yaml-mode
+          python-mode) . highlight-indentation-mode)
+  )
 
 (use-package web-mode
     :mode ("\\.html\\'")
@@ -379,8 +384,11 @@
   :after (treemacs magit)
   :ensure t)
 
+
 (use-package wgrep :ensure t)
-(use-package yaml-mode :ensure t)
+(use-package yaml-mode
+  :ensure t
+  )
 
 (use-package yasnippet
   :ensure t
@@ -423,7 +431,10 @@
 (setq-default fill-column 80)
 (setq column-number-mode t)
 
-(use-package smart-shift :ensure t)
+(use-package smart-shift
+  :ensure t
+  :hook ((python-mode yaml-mode) . smart-shift-mode)
+  )
 
 (when (member "Fira Code" (font-family-list))
   (set-frame-font "Fira Code-15" t t))

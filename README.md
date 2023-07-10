@@ -9,7 +9,6 @@
 sudo apt install pandoc
 
 
-
 ```
 
 ### lsp mode language support
