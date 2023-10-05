@@ -10,12 +10,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
  '(custom-safe-themes
    '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(highlight-indentation-blank-lines t)
  '(lsp-ui-flycheck-list-position 'right)
  '(package-selected-packages
-   '(highlight-indentation smart-shift company-box visual-fill-column-mode org-web-tools py-autopep8 impatient-mode simple-httpd adoc-mode treemacs-magit go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
+   '(org-appear highlight-indentation smart-shift company-box visual-fill-column-mode org-web-tools py-autopep8 impatient-mode simple-httpd adoc-mode treemacs-magit go-snippets yasnippet protobuf-mode ansible iedit go-playground all-the-icons-completion all-the-icons-dired all-the-icons-ibuffer company flycheck go-mode add-node-modules-path all-the-icons dockerfile-mode exec-path-from-shell lsp-mode lsp-pyright lsp-treemacs lsp-ui magit markdown-mode neotree ox-asciidoc ox-epub projectile smart-mode-line smart-mode-line-powerline-theme treemacs treemacs-icons-dired treemacs-projectile use-package wgrep yaml-mode json-mode nvm terraform-doc terraform-mode))
  '(tool-bar-mode nil)
  '(undo-limit 160000000)
  '(undo-outer-limit 240000000)
@@ -26,7 +27,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 151 :width normal :foundry "DAMA" :family "Ubuntu Mono"))))
+ '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :extend nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "nil" :family "Menlo"))))
  '(company-tooltip ((t (:background "medium blue" :foreground "yellow1"))))
  '(cperl-array-face ((((class color) (background dark)) (:background "black" :foreground "goldenrod" :weight bold))))
  '(cperl-hash-face ((((class color) (background dark)) (:background "black" :foreground "dark salmon" :slant italic :weight bold))))
@@ -61,6 +62,7 @@
 
 (windmove-default-keybindings)
 
+(setq vc-follow-symlinks t)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (add-to-list 'package-archives
@@ -69,7 +71,7 @@
 (setq use-dialog-box nil)
 
 
-(setq-default tab-width 2)
+(setq-default tab-width 4)
 
 (desktop-save-mode 1)
 (fringe-mode '(16 . 10))
@@ -105,8 +107,8 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (setq require-final-newline t)
-(setq sh-basic-offset 2)
-(setq sh-indentation 2)
+(setq sh-basic-offset 4)
+(setq sh-indentation 4)
 
 (use-package lsp-mode
   :ensure t
@@ -438,6 +440,8 @@
 
 (when (member "Fira Code" (font-family-list))
   (set-frame-font "Fira Code-15" t t))
+(when (member "Melno" (font-family-list))
+  (set-frame-font "melno-15" t t))
 
 ;; set font for symbols
 (set-fontset-font
